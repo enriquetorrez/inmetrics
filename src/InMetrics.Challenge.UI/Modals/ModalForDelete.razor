@@ -1,0 +1,28 @@
+﻿@page "/ModalForDelete"
+
+<div class="row">
+    <div class="col-sm-12">
+        <p>You are going to delete a register</p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+    <button class="btn btn-dark" id="delete-button" @onclick="confirm">Delete</button>
+    </div>
+    <div class="col-sm-6">
+    <button class="btn btn-outline-dark" @onclick="Cancel">Return</button>
+    </div>
+</div>
+
+
+
+@code {
+    [CascadingParameter] BlazoredModalInstance ModalInstance { get; set; }
+    void Cancel()
+    {
+        ModalInstance.CancelAsync();
+    }
+    void confirm() {
+        ModalInstance.CloseAsync(ModalResult.Ok<string>(""));
+    }
+}

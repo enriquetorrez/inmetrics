@@ -1,0 +1,36 @@
+# Base image
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+WORKDIR /app
+# Expose ports
+EXPOSE 80
+EXPOSE 443
+
+# Build image
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+WORKDIR /src
+
+# Copy project files and restore dependencies
+COPY ["src/InMetrics.Challenge.UI/InMetrics.Challenge.UI.csproj", "InMetrics.Challenge.UI/"]
+COPY ["src/InMetrics.Models/InMetrics.Models.csproj", "InMetrics.Models/"]
+COPY ["src/InMetrics.BusinessRules/InMetrics.BusinessRules.csproj", "InMetrics.BusinessRules/"]
+COPY ["src/InMetrics.HttpLibrary/InMetrics.HttpLibrary.csproj", "InMetrics.HttpLibrary/"]
+COPY ["src/InMetrics.Endpoints/InMetrics.Endpoints.csproj", "InMetrics.Endpoints/"]
+
+RUN dotnet restore "InMetrics.Challenge.UI/InMetrics.Challenge.UI.csproj"
+
+# Copy application files and build
+COPY . .
+RUN ls -la
+WORKDIR "src/InMetrics.Challenge.UI"
+RUN ls -la
+RUN dotnet build "InMetrics.Challenge.UI.csproj" -c Release -o /app/build
+
+# Publish application
+FROM build AS publish
+RUN dotnet publish "InMetrics.Challenge.UI.csproj" -c Release -o /app/publish
+
+# Final image
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "InMetrics.Challenge.UI.dll"]

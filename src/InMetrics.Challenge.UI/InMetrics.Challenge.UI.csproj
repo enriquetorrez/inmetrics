@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Blazored.LocalStorage" Version="4.4.0" />
+    <PackageReference Include="Blazored.Modal" Version="7.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\InMetrics.Endpoints\InMetrics.Endpoints.csproj" />
+    <ProjectReference Include="..\InMetrics.HttpLibrary\InMetrics.HttpLibrary.csproj" />
+    <ProjectReference Include="..\InMetrics.Models\InMetrics.Models.csproj" />
+  </ItemGroup>
+
+</Project>

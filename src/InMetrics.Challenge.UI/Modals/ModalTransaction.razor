@@ -1,0 +1,41 @@
+﻿@page "/ModalTransaction"
+<h3>ModalTransaction</h3>
+
+<EditForm Model="Model" OnValidSubmit="Create">
+    <DataAnnotationsValidator />
+
+    <ValidationSummary />
+
+    <div class="form-group">
+        <InputNumber @bind-Value="Model.Amount" placeholder="Amount" class="form-control" />
+    </div>
+
+    <button class="btn btn-outline-dark" type="submit">
+        <span class="oi oi-pencil"></span>Submit        
+    </button>
+    <button class="btn btn-outline-dark" @onclick="Cancel">Cancel</button>
+</EditForm>
+
+@code {
+    [CascadingParameter] BlazoredModalInstance ModalInstance { get; set; }
+
+    [ParameterAttribute]
+    public bool IsAddition { get; set; }
+
+    private Transaction Model = new Transaction()
+    {
+        TransactionId = Guid.NewGuid(),
+        Creation = DateTime.Now,
+        UserId = "Test",
+    };
+    private async Task Create()
+    {
+        Model.IsAddition = IsAddition;
+        await ModalInstance.CloseAsync(ModalResult.Ok<Transaction>(Model));
+        StateHasChanged();
+    }
+    void Cancel()
+    {
+        ModalInstance.CancelAsync();
+    }
+}

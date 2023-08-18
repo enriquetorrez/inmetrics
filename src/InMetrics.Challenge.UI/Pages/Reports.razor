@@ -1,0 +1,52 @@
+﻿@page "/Reports"
+@inject ITransactionSummaryRepository _transactionSummaryRepo;
+
+<h3>Reports</h3>
+<p>Highly recommend load data in a <a href="https://powerbi.microsoft.com/pt-br" target="_blank">BI Platform</a></p>
+
+@if (_transactionSummaries == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Credit</th>
+                <th>Debit</th>
+                <th>Total amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var transactionSummary in _transactionSummaries)
+            {
+                
+                <tr>
+                    <td>@transactionSummary.Date.ToShortDateString()</td>
+                    <td>@transactionSummary.Credit</td>
+                    <td>@transactionSummary.Debit</td>
+                    <td>@transactionSummary.TotalAmount</td>                   
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@code {
+    
+    private IList<TransactionSummary> _transactionSummaries;
+    #region on initialized
+    
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+
+        if (firstRender)
+        {
+            _transactionSummaries = await _transactionSummaryRepo.Get(Endpoints.EndPoint.TransactionSummary);            
+            StateHasChanged();
+        }
+    }
+    #endregion
+
+}
