@@ -24,8 +24,6 @@ jobs:
 
       - name: Scan entire repository
         run: |
-              
-          # Run full filesystem scan (not git diff)
           gitleaks detect \
             --source . \
             --no-git \
