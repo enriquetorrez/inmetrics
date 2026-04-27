@@ -26,4 +26,3 @@ jobs:
             --source . \
             --no-git \
             --log-level info
-``
