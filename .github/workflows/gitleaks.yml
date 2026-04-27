@@ -1,31 +1,19 @@
-name: gitleaks-full-scan
-
+name: gitleaks
 on:
+  pull_request:
+  push:
   workflow_dispatch:
   schedule:
-    - cron: "0 4 * * *"
-
+    - cron: "0 4 * * *" # run once a day at 4 AM
 jobs:
   scan:
+    name: gitleaks
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Install Gitleaks
-        uses: gitleaks/gitleaks-action@v2
-        with:
-          install-only: true
-
-      - name: Verify Gitleaks
-        run: gitleaks version
-
-      - name: Scan entire repository
-        run: |
-          gitleaks detect \
-            --source . \
-            --no-git \
-            --config .gitleaks.toml \
-            --log-level info
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }} # Only requi
